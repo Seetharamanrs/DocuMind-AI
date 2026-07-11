@@ -11,4 +11,4 @@ if __name__=="__main__":
     model=SentenceTransformer("models/all-MiniLM-L6-v2")
     text=load_pdf(file_path)
     chunks=split_text(text)
-    generate_embeddings(chunks)
+    generate_embeddings(model,chunks)
