@@ -1,4 +1,4 @@
-from sentence_transformer import SentenceTransformer
+from sentence_transformers import SentenceTransformer
 from src.text_splitter import split_text
 from src.document_loader import load_pdf
 from src.embeddings import generate_embeddings
