@@ -1,23 +1,23 @@
-from src.text_splitter import split_text
-from src.document_loader import load_pdf
-from src.embeddings import generate_embeddings
-from src.vector_store import create_vector_store 
+
+from src.vector_store import  load_chunks, load_vector_store
 from src.retriever import retrieve_chunks
 from sentence_transformers import SentenceTransformer
+from src.llm import generate_answer
 
-def build_rag_pipeline(file_path, question):
+def initialize_rag():
     model = SentenceTransformer("notebook/models/all-MiniLM-L6-v2")
-    text=load_pdf(file_path)
-    chunks=split_text(text)
-    chunks_embeddings=generate_embeddings(model,chunks)
-    index = create_vector_store(chunks_embeddings)
+    chunks=load_chunks()
+    index = load_vector_store()
+    return model, index, chunks
+
+def ask_question(question, model, index, chunks):
     retrieved_chunks = retrieve_chunks(question,model,index,chunks)
     context=str(retrieved_chunks)
     prompt = f"""
         You are an AI assistant answering questions using the employee handbook.
 
         Context:
-        {retrieved_chunks}
+        {context}
 
         Question:
         {question}
@@ -29,10 +29,22 @@ def build_rag_pipeline(file_path, question):
 
         Answer:
         """
-    return prompt
+    response=generate_answer(prompt)
+    return response
 
 if __name__=="__main__":
     file_path=r"D:\my_git\DocuMind-AI\data\policy document.pdf"
-    question= input("Enter the question: ")
-    prompt=build_rag_pipeline(file_path, question)
-    print(prompt)
+    model,index,chunks=initialize_rag()
+
+    print("DocuMind AI is ready")
+    print(" Type exit to quit.\n")
+
+    while True:
+        question= input("Enter the question: ")
+        if question.lower() == "exit":
+            print("Goodbye!")
+            break
+        else:
+            response=ask_question(question,model,index,chunks)
+            print(f"{response.output_text}\n\n")
+            
