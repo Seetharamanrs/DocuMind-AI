@@ -19,3 +19,7 @@ def preprocess_document(file_path):
     save_chunks(chunks)
 
     print("Preprocessing completed successfully!")
+
+if __name__=="__main__":
+    file_path=r"D:\my_git\DocuMind-AI\data\policy document.pdf"
+    preprocess_document(file_path)
