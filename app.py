@@ -1,6 +1,7 @@
 from flask import Flask,request,jsonify
 from src.rag_pipeline import initialize_rag,ask_question
 from src.preprocessing import preprocess_document
+from s3_utils import upload_file
 app=Flask(__name__)
 app.config["MAX_CONTENT_LENGTH"] = 20 * 1024 * 1024
 
@@ -31,6 +32,11 @@ def upload():
     
     file_path= f"data/{uploaded_file.filename}"
     uploaded_file.save(file_path)
+    # upload_file(
+    # file_path,
+    # f"documents/{uploaded_file.filename}"
+    # ) # This snippet for the AWS deployment 
+
     preprocess_document(file_path)
     model, index, chunks = initialize_rag()
     return jsonify({
