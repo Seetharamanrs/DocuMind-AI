@@ -18,7 +18,7 @@ def ask_question(question, model, index, chunks):
 
         Context:
         {context}
-
+        
         Question:
         {question}
 
@@ -36,7 +36,7 @@ if __name__=="__main__":
     file_path=r"D:\my_git\DocuMind-AI\data\policy document.pdf"
     model,index,chunks=initialize_rag()
 
-    print("DocuMind AI is ready")
+    print("DocuMind AI is ready!!!!")
     print(" Type exit to quit.\n")
 
     while True:
@@ -46,5 +46,5 @@ if __name__=="__main__":
             break
         else:
             response=ask_question(question,model,index,chunks)
-            print(f"{response.output_text}\n\n")
+            print(f"{response.output_text}\n")
             
